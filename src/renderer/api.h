@@ -440,10 +440,10 @@ typedef union ShaderCustomParams {
 } ShaderCustomParams;
 
 typedef struct SpriteStateParams {
+	ShaderProgram *shader;
 	Texture *primary_texture;
 	Texture *aux_textures[R_NUM_SPRITE_AUX_TEXTURES];
 	BlendMode blend;
-	ShaderProgram *shader;
 } SpriteStateParams;
 
 typedef union SpriteScaleParams {
@@ -465,17 +465,13 @@ typedef struct SpriteRotationParams {
 } SpriteRotationParams;
 
 typedef struct SpriteFlipParams {
-	unsigned char x : 1;
-	unsigned char y : 1;
+	bool x;
+	bool y;
 } SpriteFlipParams;
 
 typedef struct SpriteParams {
-	const char *sprite;
 	Sprite *sprite_ptr;
-
-	const char *shader;
 	ShaderProgram *shader_ptr;
-
 	Texture *aux_textures[R_NUM_SPRITE_AUX_TEXTURES];
 
 	// TODO: maybe embed these by value and get rid of SpriteParamsBuffer?

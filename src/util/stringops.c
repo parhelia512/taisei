@@ -51,7 +51,7 @@ bool strstartswith_any(const char *s, const char **earray) {
 
 void stralloc(char **dest, const char *src) {
 	mem_free(*dest);
-	*dest = src ? strdup(src) : NULL;
+	*dest = src ? mem_strdup(src) : NULL;
 }
 
 char* strjoin(const char *first, ...) {
@@ -117,6 +117,34 @@ char* strfmt(const char *fmt, ...) {
 	return str;
 }
 
+char* vstrfmt_arena(MemArena *arena, const char *fmt, va_list args) {
+	size_t buf_size = strlen(fmt) * 2;
+	char *buf = marena_alloc(arena, buf_size);
+
+	va_list nargs;
+	va_copy(nargs, args);
+	int written = vsnprintf(buf, buf_size, fmt, nargs);
+	va_end(nargs);
+
+	buf = marena_realloc(arena, buf, buf_size, written + 1);
+
+	if(written >= buf_size) {
+		buf_size = written + 1;
+		written = vsnprintf(buf, buf_size, fmt, args);
+		assert(written == buf_size - 1);
+	}
+
+	return buf;
+}
+
+char* strfmt_arena(MemArena *arena, const char *fmt, ...) {
+	va_list args;
+	va_start(args, fmt);
+	char *str = vstrfmt_arena(arena, fmt, args);
+	va_end(args);
+	return str;
+}
+
 char* strftimealloc(const char *fmt, const struct tm *timeinfo) {
 	size_t sz_allocated = 64;
 
@@ -124,7 +152,7 @@ char* strftimealloc(const char *fmt, const struct tm *timeinfo) {
 		char str[sz_allocated];
 
 		if(strftime(str, sz_allocated, fmt, timeinfo)) {
-			return strdup(str);
+			return mem_strdup(str);
 		}
 
 		sz_allocated *= 2;
@@ -133,7 +161,7 @@ char* strftimealloc(const char *fmt, const struct tm *timeinfo) {
 
 char* strappend(char **dst, const char *src) {
 	if(!*dst) {
-		return *dst = strdup(src);
+		return *dst = mem_strdup(src);
 	}
 
 	*dst = mem_realloc(*dst, strlen(*dst) + strlen(src) + 1);

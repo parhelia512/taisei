@@ -220,7 +220,7 @@ static void credits_add(char *data, int time) {
 	for(c = data; *c; ++c) {
 		if(*c == '\n') {
 			buf[i] = 0;
-			e->data[l] = strdup(buf);
+			e->data[l] = mem_strdup(buf);
 			i = 0;
 			++l;
 		} else {
@@ -229,7 +229,7 @@ static void credits_add(char *data, int time) {
 	}
 
 	buf[i] = 0;
-	e->data[l] = strdup(buf);
+	e->data[l] = mem_strdup(buf);
 	credits.end += time;
 }
 
@@ -454,7 +454,7 @@ static void credits_draw_entry(CreditsEntry *e) {
 			r_draw_sprite(&(SpriteParams) {
 				.sprite_ptr = yukkuri_spr,
 				.pos.y = -60 * elevation * fadein + halfheight * squeeze,
-				.shader = "sprite_default",
+				.shader_ptr = res_shader("sprite_default"),
 				.scale.x = 1.0 - squeeze,
 				.scale.y = 1.0 + squeeze,
 			});

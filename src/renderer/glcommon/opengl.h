@@ -143,7 +143,6 @@ void glcommon_load_functions(void);
 void glcommon_check_capabilities(void);
 void glcommon_unload_library(void);
 ext_flag_t glcommon_check_extension(const char *ext) attr_nonnull_all;
-ext_flag_t glcommon_require_extension(const char *ext) attr_nonnull_all;
 void glcommon_setup_attributes(SDL_GLprofile profile, uint major, uint minor, SDL_GLcontextFlag ctxflags);
 
 struct glext_s {
@@ -156,8 +155,7 @@ struct glext_s {
 	} version;
 
 	struct {
-		uchar avoid_sampler_uniform_updates : 1;
-		uchar disable_norm16 : 1;
+		bool disable_norm16 : 1;
 	} issues;
 
 	ext_flag_t clear_texture;
@@ -168,6 +166,7 @@ struct glext_s {
 	ext_flag_t float_blend;
 	ext_flag_t instanced_arrays;
 	ext_flag_t internalformat_query2;
+	ext_flag_t invalidate_subdata;
 	ext_flag_t pixel_buffer_object;
 	ext_flag_t seamless_cubemap;
 	ext_flag_t texture_filter_anisotropic;
@@ -177,6 +176,7 @@ struct glext_s {
 	ext_flag_t texture_half_float_linear;
 	ext_flag_t texture_norm16;
 	ext_flag_t texture_rg;
+	ext_flag_t texture_storage;
 	ext_flag_t texture_swizzle;
 	ext_flag_t vertex_array_object;
 	ext_flag_t viewport_array;
