@@ -1,4 +1,3 @@
-
 Basis Universal
 ===============
 
@@ -22,10 +21,10 @@ Taisei repository, including submodules, this can be done like so on Linux:
 
 .. code:: sh
 
-    cd subprojects/basis_universal
-    meson setup --buildtype=release -Db_lto=true -Dcpp_args=-march=native build
-    meson compile -C build basisu
-    ln -s $PWD/build/basisu ~/.local/bin
+   cd subprojects/basis_universal
+   meson setup --buildtype=release -Db_lto=true -Dcpp_args=-march=native build
+   meson compile -C build basisu
+   ln -s "$PWD/build/basisu" ~/.local/bin
 
 Verify that the encoder is working by running ``basisu``. It should print a long list of options. If the command is not
 found, make sure ``~/.local/bin`` is in your ``PATH``, or choose another directory that is.
@@ -33,7 +32,7 @@ found, make sure ``~/.local/bin`` is in your ``PATH``, or choose another directo
 The optimization options in ``meson setup`` are optional but highly recommended, as the encoding process can be quite
 slow.
 
-It's also possible to use `the upstream encoder <https://github.com/BinomialLLC/basis_universal>`__, which may be
+It’s also possible to use `the upstream encoder <https://github.com/BinomialLLC/basis_universal>`__, which may be
 packaged by your distribution. However, this is not recommended. As of 2020-08-06, the upstream encoder is missing some
 important performance optimizations; see
 `BinomialLLC/basis_universal#105 <https://github.com/BinomialLLC/basis_universal/pull/105>`__
@@ -43,12 +42,12 @@ important performance optimizations; see
 Step 2: The wrapper
 ~~~~~~~~~~~~~~~~~~~
 
-The ``mkbasis`` wrapper script is what you'll actually use to create ``.basis`` files. Simply symlink it into your
+The ``mkbasis`` wrapper script is what you’ll actually use to create ``.basis`` files. Simply symlink it into your
 ``PATH``:
 
 .. code:: sh
 
-    ln -s $PWD/scripts/mkbasis.py ~/.local/bin/mkbasis
+   ln -s "$PWD/scripts/mkbasis.py" ~/.local/bin/mkbasis
 
 Verify that it works by running ``mkbasis``.
 
@@ -59,59 +58,59 @@ Encode a **diffuse or ambient map** (sRGB data, decoded to linear when sampled i
 
 .. code:: sh
 
-    # Outputs to foo.basis
-    mkbasis foo.png
+   # Outputs to foo.basis
+   mkbasis foo.png
 
-    # Outputs to /path/to/bar.basis
-    mkbasis foo.png -o /path/to/bar.basis
+   # Outputs to /path/to/bar.basis
+   mkbasis foo.png -o /path/to/bar.basis
 
 Encode a **tangent-space normal map** (special case):
 
 .. code:: sh
 
-    mkbasis foo.png --normal
+   mkbasis foo.png --normal
 
 Encode a **roughness map** (single-channel linear data):
 
 .. code:: sh
 
-    mkbasis foo.png --channels=r --linear
-    # Equivalent to:
-    mkbasis foo.png --r --linear
+   mkbasis foo.png --channels=r --linear
+   # Equivalent to:
+   mkbasis foo.png --r --linear
 
 Encode **RGBA** color data and **pre-multiply alpha**:
 
 .. code:: sh
 
-    mkbasis foo.png --channels=rgba
-    # Equivalent to:
-    mkbasis foo.png --rgba
+   mkbasis foo.png --channels=rgba
+   # Equivalent to:
+   mkbasis foo.png --rgba
 
 Encode **Gray+Alpha** data and **pre-multiply alpha**:
 
 .. code:: sh
 
-    mkbasis foo.png --channels=gray-alpha
-    # Equivalent to:
-    mkbasis foo.png --gray-alpha
+   mkbasis foo.png --channels=gray-alpha
+   # Equivalent to:
+   mkbasis foo.png --gray-alpha
 
 Do **not** pre-multiply alpha:
 
 .. code:: sh
 
-    mkbasis foo.png --no-multiply-alpha
+   mkbasis foo.png --no-multiply-alpha
 
 Sacrifice quality to speed up the encoding process:
 
 .. code:: sh
 
-    mkbasis foo.png --fast
+   mkbasis foo.png --fast
 
 For a complete list of options and their default values, see
 
 .. code:: sh
 
-    mkbasis --help
+   mkbasis --help
 
 Encoding details
 ----------------
@@ -130,11 +129,10 @@ as their ETC1S equivalents (including mipmaps), comparable to the source file st
 compression.
 
 Although UASTC should theoretically work, it has not been well tested with Taisei yet. The ``mkbasis`` wrapper also does
-not apply LZ compression to UASTC files automatically yet, and Taisei wouldn't pick them up either (unless they are
+not apply LZ compression to UASTC files automatically yet, and Taisei wouldn’t pick them up either (unless they are
 stored compressed inside of a ``.zip`` package). If you want to use UASTC nonetheless, pass ``--uastc`` to ``mkbasis``.
 
 *TODO*
-
 
 Caveats and limitations
 -----------------------
